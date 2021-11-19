@@ -3,6 +3,7 @@ module.exports = (app) => {
   let router = require("express").Router();
 
   router.get("/findAll", artigosController.findAll);
+  router.get("/findById/:id", artigosController.findById);
   router.post("/", artigosController.create);
 
   app.use("/artigos", router);

@@ -15,7 +15,16 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  const artigos = tabelaArtigos.findAll()
+  const artigos = tabelaArtigos
+    .findAll()
+    .then((data) => res.send(data))
+    .catch(() => res.status(500).send("Ocorreu um erro "));
+};
+
+
+exports.findById = (req, res) => {
+  const artigosId = tabelaArtigos
+    .findOne({ where: { id: req.params.id}})
     .then((data) => res.send(data))
     .catch(() => res.status(500).send("Ocorreu um erro "));
 };
