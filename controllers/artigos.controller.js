@@ -15,16 +15,69 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  const artigos = tabelaArtigos
+  tabelaArtigos
     .findAll()
+    .then((data) => {
+      if (data.length !== 0) {
+        res.send(data);
+      } else {
+        res.send("Não há dados disponíveis para a visualização");
+      }
+    })
+    .catch(() => res.status(500).send("Ocorreu um erro "));
+};
+
+exports.findById = (req, res) => {
+  const { id } = req.query;
+  tabelaArtigos
+    .findByPk(id)
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res
+          .status(404)
+          .send(`Não foi possível encontrar nenhum artigo com o id ${id} `);
+      }
+    })
+    .catch(() =>
+      res.status(500).send(`Ocorreu um erro ao buscar o artigo com o id ${id}`)
+    );
+};
+
+exports.findByTitulo = (req, res) => {
+  const { titulo } = req.query;
+  tabelaArtigos
+
+    .findOne({ where: { titulo } })
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res
+          .status(404)
+          .send(
+            `Não foi possível encontrar nenhum artigo com o título ${titulo} `
+          );
+      }
+    })
+    .catch(() =>
+      res
+        .status(500)
+        .send(`Ocorreu um erro ao buscar o artigo com o título ${titulo}`)
+    );
+};
+
+exports.update = (req, res) => {
+  tabelaArtigos
+    .update(req.body, { where: { id: req.params.id } })
     .then((data) => res.send(data))
     .catch(() => res.status(500).send("Ocorreu um erro "));
 };
 
-
-exports.findById = (req, res) => {
-  const artigosId = tabelaArtigos
-    .findOne({ where: { id: req.params.id}})
+exports.delete = (req, res) => {
+  tabelaArtigos
+    .destroy({ where: { id: req.params.id } })
     .then((data) => res.send(data))
     .catch(() => res.status(500).send("Ocorreu um erro "));
 };
