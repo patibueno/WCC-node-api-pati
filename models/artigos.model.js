@@ -8,6 +8,8 @@ module.exports = (sequelizeDatabase, Sequelize) => {
     },
     publicado: {
       type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   });
 
